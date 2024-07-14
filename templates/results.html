@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e0f7fa;
+            color: #01579b;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative; /* Added for watermark */
+        }
+
+        .wrapper {
+            flex: 1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header,
+        footer {
+            background-color: #0277bd;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        header h1 {
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .card h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #01579b;
+        }
+
+        .card p {
+            font-size: 1em;
+            margin-bottom: 20px;
+            color: #0277bd;
+        }
+
+        .card form {
+            margin-bottom: 20px;
+        }
+
+        .card input[type="file"] {
+            display: block;
+            margin-bottom: 10px;
+            border: 1px solid #81d4fa;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .card button {
+            padding: 10px 15px;
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .card button:hover {
+            background-color: #0277bd;
+        }
+
+        .flashes {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .flashes li {
+            background: #b3e5fc;
+            padding: 10px;
+            border: 1px solid #0288d1;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #e1f5fe;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #81d4fa;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        /* Flowchart image styling */
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #81d4fa;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* Add this to your existing CSS file */
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        main.container {
+            flex: 1;
+        }
+
+        /* Watermark styling */
+        body::before {
+            content: 'SRIVIDHYA 23MX326';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5em;
+            color: rgba(1, 87, 155, 0.3); /* 30% transparency */
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="container">
+                <h1>MacroInsight: VBA Macro Analysis Tool</h1>
+            </div>
+        </header>
+        <main class="container">
+            <div class="card">
+                <h2>VBA Code Analysis Results</h2>
+                <h3>VBA Code Extracted</h3>
+                <pre>{{ vba_code }}</pre>
+                <hr>
+
+                <div style="margin-top: 20px;">
+                    <h3>Analysis Overview</h3>
+                    <ul>
+                        <li>{{ line }}</li>
+                    </ul>
+                </div>
+                <hr>
+
+                <h3>Flowchart</h3>
+                <img src="{{ url_for('static', filename=flowchart_path) }}" alt="VBA Macro Flowchart">
+
+                <hr>
+
+                <h3>Code Quality and Efficiency</h3>
+                <ul>
+                    <li>Score: {{ analysis_results.code_quality.score }}</li>
+                    <li>Potential Inefficiencies:</li>
+                    <ul>
+                        {% for inefficiency in analysis_results.code_quality.inefficiencies %}
+                        <li>{{ inefficiency }}</li>
+                        {% endfor %}
+                    </ul>
+                    <li>Redundant Code:</li>
+                    <ul>
+                        {% for redundant in analysis_results.code_quality.redundancies %}
+                        <li>{{ redundant }}</li>
+                        {% endfor %}
+                    </ul>
+                    <li>Optimization Opportunities:</li>
+                    <ul>
+                        {% for optimization in analysis_results.code_quality.optimizations %}
+                        <li>{{ optimization }}</li>
+                        {% endfor %}
+                    </ul>
+                </ul>
+                <hr>
+
+                <h3>Data Flow Analysis</h3>
+                <ul>
+                    <li>Bottlenecks:</li>
+                    <ul>
+                        {% for bottleneck in analysis_results.data_flow_analysis.bottlenecks %}
+                        <li>{{ bottleneck }}</li>
+                        {% endfor %}
+                    </ul>
+                    <li>Optimization Opportunities:</li>
+                    <ul>
+                        {% for optimization in analysis_results.data_flow_analysis.optimizations %}
+                        <li>{{ optimization }}</li>
+                        {% endfor %}
+                    </ul>
+                </ul>
+                <hr>
+
+                <h3>Detailed Analysis</h3>
+                <pre>
+                    {% for line in documentation %}
+                        {{ line }}
+                    {% endfor %}
+                </pre>
+                <a href="{{ url_for('download_pdf', filename=pdf_filename) }}">Download PDF Documentation</a>
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <p>&copy; 2024 MacroInsight. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

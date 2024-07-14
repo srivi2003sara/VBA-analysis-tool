@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Excel File</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e0f7fa;
+            color: #01579b;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative; /* Added for watermark */
+        }
+
+        .wrapper {
+            flex: 1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header,
+        footer {
+            background-color: #0277bd;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        header h1 {
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .card h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #01579b;
+        }
+
+        .card p {
+            font-size: 1em;
+            margin-bottom: 20px;
+            color: #0277bd;
+        }
+
+        .card form {
+            margin-bottom: 20px;
+        }
+
+        .card input[type="file"] {
+            display: block;
+            margin-bottom: 10px;
+            border: 1px solid #81d4fa;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .card button {
+            padding: 10px 15px;
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .card button:hover {
+            background-color: #0277bd;
+        }
+
+        .flashes {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .flashes li {
+            background: #b3e5fc;
+            padding: 10px;
+            border: 1px solid #0288d1;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #e1f5fe;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #81d4fa;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        /* Flowchart image styling */
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #81d4fa;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* Add this to your existing CSS file */
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Watermark styling */
+        body::before {
+            content: 'SRIVIDHYA 23MX326';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5em;
+            color: rgba(1, 87, 155, 0.3); /* 30% transparency */
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="container">
+                <h1>MacroInsight: VBA Macro Analysis Tool</h1>
+            </div>
+        </header>
+        <main class="container">
+            <div class="card">
+                <h2>Upload an Excel File with VBA Macros</h2>
+                <p>UPLOAD AN EXCEL FILE WITH VBA MACROS TO RUN ANALYSIS</p>
+                <form id="upload-form" action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" accept=".xlsm" required>
+                    <button type="submit">UPLOAD</button>
+                </form>
+                <ul class="flashes">
+                    {% if message %}
+                        <li>{{ message }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();  // Parse JSON response
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.error || 'Upload failed');
+                    });
+                }
+            })
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/results';  // Redirect to results page
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred: ' + error.message);
+            });
+        });
+    </script>
+</body>
+
+</html>
